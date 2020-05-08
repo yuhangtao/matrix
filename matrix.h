@@ -16,7 +16,10 @@ public:
 	Matrix	operator+(const double& other) const;
 	Matrix	operator-(const Matrix& other) const;
 	Matrix	operator-(const double& other) const;
+	Matrix	operator*(const Matrix& other) const;
 	Matrix	operator*(const double& other) const;
+	Matrix transpose();
+	Matrix UMatrix();
 
 private:
 	int num_x = 0;

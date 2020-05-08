@@ -138,6 +138,31 @@ Matrix Matrix::operator-(const double& other) const
 	}
 	return ans;
 }
+Matrix Matrix::operator*(const Matrix& other) const 
+{
+	bool t = (this->num_y == other.num_x);
+	Matrix ans;
+	if (t)
+	{
+		ans.num_x = this->num_x;
+		ans.num_y = other.num_y;
+		ans.data.resize(this->num_x);
+		for (int i = 0; i < num_x; i++)
+		{
+			ans.data[i].resize(other.num_y);
+			for (int j = 0; j < num_y; j++)
+			{
+				double h = 0.0;
+				for (int k = 0; k < other.num_x; ++k)
+				{
+					h += this->data[i][k] * other.data[k][j];
+				}
+				ans.data[i][j] = h;
+			}
+		}
+	}
+	return ans;
+}
 Matrix Matrix::operator*(const double& other) const
 {
 	Matrix ans;
@@ -154,4 +179,51 @@ Matrix Matrix::operator*(const double& other) const
 		}
 	}
 	return ans;
+}
+Matrix Matrix::transpose() 
+{
+	Matrix X;
+	X.num_x = this->num_y;
+	X.num_y = this->num_x;
+	X.data.resize(num_x);
+	for (int i = 0; i < num_x; i++) 
+	{
+		X.data[i].resize(num_y);
+		for (int j = 0; j < num_y; j++) 
+		{
+			X.data[i][j] = this->data[j][i];
+		}
+	}
+	return X;
+}
+Matrix Matrix::UMatrix() 
+{
+	Matrix x;
+	x.num_x = this->num_x;
+	x.num_y = this->num_y;
+	x.data.resize(num_x);
+	for (int i = 0; i < num_x; i++) 
+	{
+		x.data[i].resize(num_y);
+		for (int j = 0; j < num_y; j++) 
+		{
+			if (i > j) x.data[i][j] = 0;
+			else 
+			{
+				if (i == 0) x.data[i][j] = this->data[i][j];
+				else 
+				{
+					double ans = 0.0;
+					for (int h = 0; h < i ; h++ )
+					{
+						ans += this->data[i][j]-this->data[i][h] / this->data[h][h]*x.data[h][j];
+					}
+					x.data[i][j] = ans;
+
+
+				}
+			}
+		}
+	}
+	return x;
 }

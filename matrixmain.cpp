@@ -7,12 +7,14 @@
 int main()
 {
     Matrix X1;
-    vector<double> test = { 1.0,3.0,3.2 };
+    vector<double> test = { 1.0,3.0,2.0,2.0 };
+    vector<double> test2 = { 1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0 };
     vector<vector<double>> X=X1.GetMatrix(2, 2,test);
-    Matrix X2,X3;
+    Matrix X2,X3,X4;
     X2.GetMatrix(2, 2);
-    X3 = X2 - 2.0;
-    X3.printmatrix();
+    X3 = X2 * X1;
+    X4.GetMatrix(3, 3, test2);
+    X4.UMatrix().printmatrix();
     std::cout << X[1][0]<<endl;
 }
 
