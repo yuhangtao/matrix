@@ -201,29 +201,105 @@ Matrix Matrix::UMatrix()
 	Matrix x;
 	x.num_x = this->num_x;
 	x.num_y = this->num_y;
-	x.data.resize(num_x);
-	for (int i = 0; i < num_x; i++) 
+	vector<vector<double>> k;
+	k = this->data;
+	for (int n = 1; n < num_x; n++) 
 	{
-		x.data[i].resize(num_y);
-		for (int j = 0; j < num_y; j++) 
+		for (int i = n; i < num_x; i++) 
 		{
-			if (i > j) x.data[i][j] = 0;
-			else 
+			double num = k[i][n - 1] / k[n - 1][n - 1];
+			for (int j = 0; j < num_y; j++) 
 			{
-				if (i == 0) x.data[i][j] = this->data[i][j];
-				else 
-				{
-					double ans = 0.0;
-					for (int h = 0; h < i ; h++ )
-					{
-						ans += this->data[i][j]-this->data[i][h] / this->data[h][h]*x.data[h][j];
-					}
-					x.data[i][j] = ans;
-
-
-				}
+				k[i][j] -= num * k[n-1][j];
 			}
 		}
 	}
+	/*for (int i = 0; i < num_x; i++) 
+	{
+		vector<double> x1;
+		x1 = this->data[i];
+		if (i > 0) 
+		{
+			for (int j = 0; j < num_y; j++) 
+			{				
+				for (int h = 0; h < i; h++) 
+				{
+					vector<double> b;
+					if (h == 0) 
+					{
+						x1[j] -= data[i][0] / k[h][h] * k[h][j];
+						b.push_back(data[i][0]);
+					} 
+					else 
+					{
+						int num = 0;
+						int num2 = b.size();
+						while (num2<h+1) 
+						{ 
+							x1[j] -= b[num] / k[h][h] * k[h][j]; 
+							num++;
+							num2++;
+						}
+						
+					}
+				}
+			}
+		}
+		k.push_back(x1);*/
+		//cout << k[0][0];
+		/*for (int j = 0; j < num_y; j++) 
+		{
+			if (i == 0) x.data[i][j] = this->data[i][j];
+			else 
+			{
+				double ans = 0.0;
+				for (int h = 0; h < i ; h++ )
+				{
+					ans = this->data[i][j] - this->data[i][h] / this->data[h][h] * x.data[h][j];
+				}
+				x.data[i][j] = ans;
+				}
+
+		}*/
+	x.data = k;
+	return x;
+}
+Matrix Matrix::LMatrix() 
+{
+	Matrix x;
+	x.num_x = this->num_x;
+	x.num_y = this->num_y;
+	vector<vector<double>> k,p;
+	k = this->data;
+	p.resize(num_x);
+	for (int i = 0; i < num_x; i++)
+	{
+		p[i].resize(num_y);
+		for (int j = 0; j < num_y; j++)
+		{
+			if (i == j) p[i][j] = 1.0;
+			else
+			{
+				p[i][j] = 0.0;
+			}
+		}
+	}
+	for (int n = 1; n < num_x; n++)
+	{
+		for (int i = n; i < num_x; i++)
+		{
+			double num = k[i][n - 1] / k[n - 1][n - 1];
+			for (int j = 0; j < num_y; j++)
+			{
+				if (i > j && p[i][j]==0 && j<=n-1)
+				{
+					p[i][j] = num;
+				}
+				k[i][j] -= num * k[n - 1][j];
+			}
+		}
+	}
+
+	x.data = p;
 	return x;
 }

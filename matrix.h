@@ -20,6 +20,7 @@ public:
 	Matrix	operator*(const double& other) const;
 	Matrix transpose();
 	Matrix UMatrix();
+	Matrix LMatrix();
 
 private:
 	int num_x = 0;
