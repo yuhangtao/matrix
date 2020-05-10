@@ -14,7 +14,7 @@ int main()
     X2.GetMatrix(2, 2);
     X3 = X2 * X1;
     X4.GetMatrix(3, 3, test2);
-    X4.LMatrix().printmatrix();
+    X4.Hexchange(1,2).printmatrix();
     std::cout << X[1][0]<<endl;
 }
 

@@ -1,7 +1,16 @@
 #include"matrix.h"
 #include"iostream"
 
+
 using namespace std;
+//bool vectorlist(vector<double>x, vector<double>y)
+//{
+//	for (int i = 0; i < x.size(); i++) 
+//	{
+//		if (x[i] == y[i]) return true;
+//		else { return false; }
+//	}
+//}
 
 Matrix::Matrix()
 {
@@ -302,4 +311,104 @@ Matrix Matrix::LMatrix()
 
 	x.data = p;
 	return x;
+}
+Matrix Matrix::inv() 
+{
+	Matrix L,U,Linv,Uinv,inv;
+	L = this->LMatrix();
+	U = this->UMatrix();
+	inv.num_x = this->num_x;
+	inv.num_y = this->num_y;
+	Linv.num_x = this->num_x;
+	Linv.num_y = this->num_y;
+	Uinv.num_x = this->num_x;
+	Uinv.num_y = this->num_y;
+
+	Linv.data.resize(num_x);
+	Uinv.data.resize(num_x);
+	inv.data.resize(num_x);
+	for (int i = 0; i < num_x; i++) 
+	{
+		Linv.data[i].resize(num_y);
+		Uinv.data[i].resize(num_y);
+		inv.data[i].resize(num_y);
+	}
+	for (int j = 0; j < num_y; j++) 
+	{
+		for (int i = j; i < num_x; i++) 
+		{
+			if (i == j) Linv.data[i][j] = 1;
+			else if (i < j) Linv.data[i][j] = 0;
+			else 
+			{
+				double s = 0.0;
+				for (int k = j; k < i; k++) 
+				{
+					s += L.data[i][k] * Linv.data[k][j];
+				}
+				Linv.data[i][j] = -Linv.data[j][j] * s;
+			}
+		}
+	}
+	for (int j = 0; j < num_y; j++)
+	{
+		for (int i = j; i >= 0; i--)
+		{
+			if (i == j) Uinv.data[i][j] = 1/U.data[i][j];
+			else if (i > j) Uinv.data[i][j] = 0;
+			else
+			{
+				double s = 0.0;
+				for (int k = i+1; k <= j; k++)
+				{
+					s += U.data[i][k] * Uinv.data[k][j];
+				}
+				Uinv.data[i][j] = -1/U.data[i][i] * s;
+			}
+		}
+	}
+	inv = Uinv * Linv;
+	return inv;
+}
+//int Matrix::Level() 
+//{
+//	int ans = this->num_x;
+//	Matrix x;
+//	vector<vector<double>> k;
+//	k = this->data;
+//	for (int n = 1; n < num_x; n++)
+//	{
+//		for (int i = n; i < num_x; i++)
+//		{
+//			if (!vectorlist(k[i], k[n])) 
+//			{
+//				double num = k[i][n - 1] / k[n - 1][n - 1];
+//				for (int j = 0; j < num_y; j++)
+//				{
+//					k[i][j] -= num * k[n - 1][j];
+//				}
+//			}			
+//		}
+//	}
+//	return ans;
+//}
+Matrix Matrix::Hexchange(int x, int y)
+{
+	for (int j = 0; j < this->num_y; j++) 
+	{
+		int num = this->data[x][j];
+		this->data[x][j] = this->data[y][j];
+		this->data[y][j] = num;
+	}
+	return *this;
+}
+Matrix Matrix::Vexchange(int x, int y)
+{
+	for (int i = 0; i < this->num_x; i++)
+	{
+		int num = this->data[i][x];
+		this->data[i][x] = this->data[i][y];
+		this->data[i][y] = num;
+	}
+	return *this;
 }
