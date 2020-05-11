@@ -14,6 +14,7 @@ public:
 	void printx();
 	void printy();
 	void printmatrix();
+	bool equal();
 	Matrix	operator+(const Matrix& other) const;
 	Matrix	operator+(const double& other) const;
 	Matrix	operator-(const Matrix& other) const;
@@ -24,6 +25,8 @@ public:
 	Matrix UMatrix();
 	Matrix LMatrix();
 	Matrix inv();
+	Matrix solve(Matrix& A, Matrix& B);
+	double det();
 	//int Level();
 
 

@@ -412,3 +412,42 @@ Matrix Matrix::Vexchange(int x, int y)
 	}
 	return *this;
 }
+bool Matrix::equal() 
+{
+	if (this->num_x == this->num_y)
+	{
+		return true;
+	}
+	else { return false; }
+}
+Matrix Matrix::solve(Matrix& A, Matrix& B) 
+{
+	Matrix c;
+	if (A.equal() && B.equal()) 
+	{
+		c = A.inv() * B;
+	}
+	return c;
+}
+double Matrix::det() 
+{
+	double ans = 1.0;
+	vector<vector<double>> k;
+	k = this->data;
+	for (int n = 1; n < num_x; n++)
+	{
+		for (int i = n; i < num_x; i++)
+		{
+			double num = k[i][n - 1] / k[n - 1][n - 1];
+			for (int j = 0; j < num_y; j++)
+			{
+				k[i][j] -= num * k[n - 1][j];
+			}
+		}
+	}
+	for (int h = 0; h < num_x; h++) 
+	{
+		ans *= k[h][h];
+	}
+	return ans;
+}

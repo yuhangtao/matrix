@@ -14,8 +14,8 @@ int main()
     X2.GetMatrix(2, 2);
     X3 = X2 * X1;
     X4.GetMatrix(3, 3, test2);
-    X4.Hexchange(1,2).printmatrix();
-    std::cout << X[1][0]<<endl;
+    X4.UMatrix().printmatrix();
+    std::cout << X4.UMatrix() .det()<<endl;
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
